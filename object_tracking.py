@@ -28,8 +28,8 @@ tracker = {}
 frame_counter = 0
 
 # cap = cv2.VideoCapture('/data/ikem_hackathon/KOAK Box 5.avi')
-cap = cv2.VideoCapture('/data/ikem_hackathon/sestry_prichazi.mp4')
-# cap = cv2.VideoCapture('/data/ikem_hackathon/nurse_and_night_ligth_transition.mp4')
+# cap = cv2.VideoCapture('/data/ikem_hackathon/sestry_prichazi.mp4')
+cap = cv2.VideoCapture('/data/ikem_hackathon/nurse_and_night_ligth_transition.mp4')
 
 visualize = False
 original_fps = cap.get(cv2.CAP_PROP_FPS)
@@ -38,7 +38,7 @@ print(f"original fps of the video: {original_fps}")
 number_of_persons_stats = defaultdict(int)
 segments_with_multiple_people = []
 slack_for_people_detection = 0
-treshold_slack_for_people_detection = 3
+treshold_slack_for_people_detection = 4 
 
 more_people = 0
 while(cap.isOpened()): # for video files
@@ -72,7 +72,8 @@ while(cap.isOpened()): # for video files
             if slack_for_people_detection > treshold_slack_for_people_detection:
                 segments_with_multiple_people[-1].update({"end":frame_counter/original_fps_rounded})
                 slack_for_people_detection = 0
-            
+                more_people = 0
+
         number_of_persons_stats[no_of_persons] += 1
 
     if visualize:

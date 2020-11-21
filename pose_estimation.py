@@ -235,5 +235,8 @@ def get_pose(frame, draw_pose=False):
                 cv2.line(frame, (B[0], A[0]), (B[1], A[1]), colors[i], 3, cv2.LINE_AA)
 
     print("Total time taken : {:.3f}".format(time.time() - t))
-    valid_people = np.vstack([n for n in personwiseKeypoints if np.sum(n == -1) < 17/2])
-    return valid_people
+    valid_persons_array = [n for n in personwiseKeypoints if np.sum(n == -1) < 17/2]
+    if valid_persons_array:
+        return np.vstack(valid_persons_array)
+    else:
+        return np.array([])
