@@ -27,14 +27,20 @@ fps = None
 tracker = {}
 frame_counter = 0
 
+# cap = cv2.VideoCapture('/data/ikem_hackathon/KOAK Box 5.avi')
 cap = cv2.VideoCapture('/data/ikem_hackathon/sestry_prichazi.mp4')
 # cap = cv2.VideoCapture('/data/ikem_hackathon/nurse_and_night_ligth_transition.mp4')
 
+visualize = False
 original_fps = cap.get(cv2.CAP_PROP_FPS)
 original_fps_rounded = int(np.round(original_fps))
 print(f"original fps of the video: {original_fps}")
 number_of_persons_stats = defaultdict(int)
+segments_with_multiple_people = []
+slack_for_people_detection = 0
+treshold_slack_for_people_detection = 3
 
+more_people = 0
 while(cap.isOpened()): # for video files
 # while True: # for captured streams
 
@@ -57,19 +63,31 @@ while(cap.isOpened()): # for video files
     if frame_counter % original_fps_rounded == 0:
         personsKeypoints = get_pose(frame, draw_pose=True)
         no_of_persons = len(personsKeypoints)
+        if no_of_persons > 1 and more_people == 0:
+            #new segment with more people
+            segments_with_multiple_people.append({"start":frame_counter/original_fps_rounded})
+            more_people += 1
+        if no_of_persons == 1 and more_people > 0:
+            slack_for_people_detection += 1 
+            if slack_for_people_detection > treshold_slack_for_people_detection:
+                segments_with_multiple_people[-1].update({"end":frame_counter/original_fps_rounded})
+                slack_for_people_detection = 0
+            
         number_of_persons_stats[no_of_persons] += 1
 
-    # show the output frame
-    cv2.imshow("Frame", frame)
-    key = cv2.waitKey(1) & 0xFF
-    # if the 's' key is selected, we are going to "select" a bounding
-    # box to track
-    if key == ord("s"):
-        tracker, initBB = init_tracker(frame, tracker, None,
-                                       args['tracker'], manual_selection=True)
-        fps = FPS().start()
-    elif key == ord('q'):
-        break
+    if visualize:
+        # show the output frame    
+        cv2.imshow("Frame", frame)
+        key = cv2.waitKey(1) & 0xFF
+        # if the 's' key is selected, we are going to "select" a bounding
+        # box to track
+        if key == ord("s"):
+            tracker, initBB = init_tracker(frame, tracker, None,
+                                        args['tracker'], manual_selection=True)
+            fps = FPS().start()
+        elif key == ord('q'):
+            break
 
 cv2.destroyAllMacs() # all credits go to Kubiczek
 print(number_of_persons_stats)
+print(segments_with_multiple_people)
