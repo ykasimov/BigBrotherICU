@@ -229,9 +229,11 @@ def get_pose(frame, draw_pose=False):
             for n in range(len(personwiseKeypoints)):
                 index = personwiseKeypoints[n][np.array(POSE_PAIRS[i])]
                 if -1 in index:
-                    continue
+                    continue          
                 B = np.int32(keypoints_list[index.astype(int), 0])
                 A = np.int32(keypoints_list[index.astype(int), 1])
                 cv2.line(frame, (B[0], A[0]), (B[1], A[1]), colors[i], 3, cv2.LINE_AA)
 
     print("Total time taken : {:.3f}".format(time.time() - t))
+    valid_people = np.vstack([n for n in personwiseKeypoints if np.sum(n == -1) < 17/2])
+    return valid_people

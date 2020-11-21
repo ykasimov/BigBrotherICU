@@ -7,6 +7,7 @@ from tracking import init_tracker, update_tracker
 from pose_estimation import get_pose
 from utils import non_max_suppression_fast as non_max_suppression
 import numpy as np
+from collections import defaultdict
 
 args = {'tracker': 'kcf'}
 
@@ -27,12 +28,21 @@ tracker = {}
 frame_counter = 0
 
 cap = cv2.VideoCapture('/data/ikem_hackathon/sestry_prichazi.mp4')
+# cap = cv2.VideoCapture('/data/ikem_hackathon/nurse_and_night_ligth_transition.mp4')
+
+original_fps = cap.get(cv2.CAP_PROP_FPS)
+original_fps_rounded = int(np.round(original_fps))
+print(f"original fps of the video: {original_fps}")
+number_of_persons_stats = defaultdict(int)
+
 while(cap.isOpened()): # for video files
 # while True: # for captured streams
 
     # grab the current frame, then handle if we are using a
     # VideoStream or VideoCapture object
     ret, frame = cap.read()
+    if frame is None:
+        break
     frame_counter += 1
 
     # resize the frame (so we can process it faster) and grab the
@@ -44,8 +54,10 @@ while(cap.isOpened()): # for video files
         # grab the new bounding box coordinates of the object
 	    update_tracker(frame, tracker, fps, draw_rectangle=True, draw_stats=True)
 
-    if frame_counter % 10 == 0:
-        get_pose(frame, draw_pose=True)
+    if frame_counter % original_fps_rounded == 0:
+        personsKeypoints = get_pose(frame, draw_pose=True)
+        no_of_persons = len(personsKeypoints)
+        number_of_persons_stats[no_of_persons] += 1
 
     # show the output frame
     cv2.imshow("Frame", frame)
@@ -60,3 +72,4 @@ while(cap.isOpened()): # for video files
         break
 
 cv2.destroyAllMacs() # all credits go to Kubiczek
+print(number_of_persons_stats)
