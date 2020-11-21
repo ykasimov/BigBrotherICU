@@ -4,6 +4,8 @@ from imutils.video import VideoStream
 from imutils.video import FPS
 cv2.destroyAllMacs = cv2.destroyAllWindows
 from tracking import init_tracker, update_tracker
+from utils import non_max_suppression_fast as non_max_suppression
+import numpy as np
 
 args = {'tracker': 'kcf'}
 
