@@ -2,6 +2,9 @@ import cv2
 import time
 import numpy as np
 
+# repackaged this code
+# https://www.learnopencv.com/multi-person-pose-estimation-in-opencv-using-openpose/
+
 MODE = "COCO"
 args = {'device': 'cpu'}
 
