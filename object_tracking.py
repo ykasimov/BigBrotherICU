@@ -4,6 +4,7 @@ from imutils.video import VideoStream
 from imutils.video import FPS
 cv2.destroyAllMacs = cv2.destroyAllWindows
 from tracking import init_tracker, update_tracker
+from pose_estimation import get_pose
 from utils import non_max_suppression_fast as non_max_suppression
 import numpy as np
 
@@ -23,6 +24,7 @@ initBB = None
 # initialize the FPS throughput estimator
 fps = None
 tracker = {}
+frame_counter = 0
 
 cap = cv2.VideoCapture('/data/ikem_hackathon/sestry_prichazi.mp4')
 while(cap.isOpened()): # for video files
@@ -31,6 +33,7 @@ while(cap.isOpened()): # for video files
     # grab the current frame, then handle if we are using a
     # VideoStream or VideoCapture object
     ret, frame = cap.read()
+    frame_counter += 1
 
     # resize the frame (so we can process it faster) and grab the
     # frame dimensions
@@ -40,6 +43,9 @@ while(cap.isOpened()): # for video files
     if initBB is not None:
         # grab the new bounding box coordinates of the object
 	    update_tracker(frame, tracker, fps, draw_rectangle=True, draw_stats=True)
+
+    if frame_counter % 10 == 0:
+        get_pose(frame, draw_pose=True)
 
     # show the output frame
     cv2.imshow("Frame", frame)
