@@ -6,6 +6,7 @@ cv2.destroyAllMacs = cv2.destroyAllWindows
 from tracking import init_tracker, update_tracker
 from pose_estimation import get_pose
 from utils import non_max_suppression_fast as non_max_suppression
+from utils import blur_or_blacken
 import numpy as np
 from collections import defaultdict
 
@@ -31,7 +32,7 @@ frame_counter = 0
 # cap = cv2.VideoCapture('/data/ikem_hackathon/sestry_prichazi.mp4')
 cap = cv2.VideoCapture('/data/ikem_hackathon/nurse_and_night_ligth_transition.mp4')
 
-visualize = False
+visualize = True # False
 original_fps = cap.get(cv2.CAP_PROP_FPS)
 original_fps_rounded = int(np.round(original_fps))
 print(f"original fps of the video: {original_fps}")

@@ -1,5 +1,7 @@
 # import the necessary packages
 import numpy as np
+import cv2
+
 # Malisiewicz et al.
 def non_max_suppression_fast(boxes, overlapThresh):
 	# if there are no boxes, return an empty list
@@ -46,3 +48,19 @@ def non_max_suppression_fast(boxes, overlapThresh):
 	# return only the bounding boxes that were picked using the
 	# integer data type
 	return boxes[pick].astype("int")
+
+def blur_or_blacken(image, bb, blur=True, copy=False):
+    x, y, w, h = bb
+    if copy:
+        img = image
+        image = cv2.copy(img)
+    if blur:
+        src = image[y:y+h, x:x+w]
+        dst = cv2.GaussianBlur(src,(11,11),cv2.BORDER_DEFAULT) 
+        image[y:y+h, x:x+w] = dst
+    else:
+        src = image[y:y+h, x:x+w]
+        src[:] = (0, 0, 0)
+
+
+
