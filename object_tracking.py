@@ -6,6 +6,7 @@ cv2.destroyAllMacs = cv2.destroyAllWindows
 from tracking import init_tracker, update_tracker
 from pose_estimation import get_pose
 from utils import non_max_suppression_fast as non_max_suppression
+from utils import blur_or_blacken
 import numpy as np
 from collections import defaultdict
 
@@ -29,39 +30,51 @@ frame_counter = 0
 
 # cap = cv2.VideoCapture('/data/ikem_hackathon/KOAK Box 5.avi')
 # cap = cv2.VideoCapture('/data/ikem_hackathon/sestry_prichazi.mp4')
-cap = cv2.VideoCapture('/data/ikem_hackathon/nurse_and_night_ligth_transition.mp4')
+# cap = cv2.VideoCapture('/data/ikem_hackathon/nurse_and_night_ligth_transition.mp4')
 
-visualize = False
+cap = cv2.VideoCapture('/data/ikem_hackathon/cuts/frames_detections/sestry_prichazy/outt.mp4')
+
+visualize = False #True # False
 original_fps = cap.get(cv2.CAP_PROP_FPS)
+total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+print(total)
 original_fps_rounded = int(np.round(original_fps))
 print(f"original fps of the video: {original_fps}")
 number_of_persons_stats = defaultdict(int)
 segments_with_multiple_people = []
 slack_for_people_detection = 0
 treshold_slack_for_people_detection = 4 
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
+img_cnt = 0
 more_people = 0
 while(cap.isOpened()): # for video files
 # while True: # for captured streams
 
+    
     # grab the current frame, then handle if we are using a
     # VideoStream or VideoCapture object
     ret, frame = cap.read()
-    if frame is None:
-        break
+    if frame is None:       
+        break        
     frame_counter += 1
-
+    
     # resize the frame (so we can process it faster) and grab the
     # frame dimensions
     frame = imutils.resize(frame, width=500)    
+    if img_cnt == 0:
+        height, width = frame.shape[:2]
+        out = cv2.VideoWriter('/data/ikem_hackathon/processed/1.mp4', fourcc, 24.0, (width, height))
+    img_cnt += 1
 
     # check to see if we are currently tracking an object
     if initBB is not None:
         # grab the new bounding box coordinates of the object
 	    update_tracker(frame, tracker, fps, draw_rectangle=True, draw_stats=True)
 
-    if frame_counter % original_fps_rounded == 0:
+    if frame_counter:# % original_fps_rounded == 0:        
         personsKeypoints = get_pose(frame, draw_pose=True)
+        out.write(frame)
         no_of_persons = len(personsKeypoints)
         if no_of_persons > 1 and more_people == 0:
             #new segment with more people
