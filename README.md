@@ -8,6 +8,8 @@
 A monitoring system for ICU in hospitals which is capable of detecting patietns and medical personnel, distinguishing between doctors and nurse, detecting actions of people such as lying, sitting, walking, eating etc. Detection of such actions allows to get a better overview of what happens in ICU at all times, for example a frequency of patients walking during a night. 
 
 
+P.S. All of the steps are done in real time, frame by frame.
+
 ## First step. Object Detection
 
 We use Detectron2 model, where backbone is pretrained on ImageNet and object detection model is trained on COCO dataset. So, model can predict around 80 common objects like person,car, bed, plate, chair, table, laptop and so on. 
