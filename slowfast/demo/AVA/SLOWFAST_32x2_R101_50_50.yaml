@@ -69,8 +69,9 @@ RNG_SEED: 0
 OUTPUT_DIR: .
 DEMO:
   ENABLE: True
+  THREAD_ENABLE: False
   LABEL_FILE_PATH: data/ava_names.json
   INPUT_VIDEO: "data/sestry_prichazi_256.mp4"
   OUTPUT_FILE: "data/action_detection.mp4"
-  DETECTRON2_CFG: "COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml"
-  DETECTRON2_WEIGHTS: detectron2://COCO-Detection/faster_rcnn_R_50_FPN_3x/137849458/model_final_280758.pkl
+  DETECTRON2_CFG: "COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml"
+  DETECTRON2_WEIGHTS: detectron2://COCO-Detection/faster_rcnn_R_101_FPN_3x/137851257/model_final_f6e8b1.pkl
