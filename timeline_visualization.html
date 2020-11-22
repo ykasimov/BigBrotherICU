@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+            function skipTime(time) {
+                var vid = document.getElementById("video");
+                vid.play();
+                vid.pause();
+                vid.currentTime = time;
+                vid.play();
+            };
+            function readURL(input) {
+                //THE METHOD THAT SHOULD SET THE VIDEO SOURCE
+                var video = document.getElementById("video");
+                if (input.files && input.files[0]) {
+                    var file = input.files[0];
+                    var url = URL.createObjectURL(file);
+                    console.log(url);
+                    var reader = new FileReader();
+                    reader.onload = function() {
+                        video.src = url;
+                        video.play();
+                    }
+                    reader.readAsDataURL(file);
+                }
+            }
+            $(function() {
+                $(".timestamp").click(function(element) {
+                    var time = parseInt($(element.target).attr('value'))
+                    skipTime(time)
+                });
+            })
+        </script>
+    </head>
+    <body>
+        <video id="video" width="640" height="480" controls>
+            <source src="" type="video/mp4" />
+        </video>
+        <ul>
+            <li><a href="#" class='timestamp' value="34">more persons in room</a></li>
+            <li><a href="#" class='timestamp' value="43">more persons in room</a></li>
+        </ul>
+        <input type="file" id="src" onchange="readURL(this);">Source</input>
+    </body>
+</html>
