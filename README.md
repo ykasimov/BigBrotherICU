@@ -12,5 +12,9 @@ We use Detectron2 model, where backbone is pretrained on ImageNet and object det
 We created a small dataset of three classes - `patient`, `doctor`, `nurse`, and trained a small neural network `people_classifier.py` to classify them.
 Having first two steps allow to identify how many people are in the room and who they are.
 
+
 ## Third step. Person Tracking. 
-In order to identify how nurses and doctors move from patient to patient and between bed, we created an easy person tracking tool 
+In order to identify how nurses and doctors move from patient to patient and between bed, we created an easy person tracking tool. We also could predict if patient is in uncommon position, and medical assistence needed.
+
+![Alt text](pictures/skeletons.jpg)
+
