@@ -687,6 +687,11 @@ _C.DEMO.LABEL_FILE_PATH = ""
 # If -1, use input video instead.
 _C.DEMO.WEBCAM = -1
 
+# Path to input file for demo.
+_C.DEMO.INPUT_FILE = ""
+# Path to input type for demo.
+_C.DEMO.INPUT_TYPE = ""
+
 # Path to input video for demo.
 _C.DEMO.INPUT_VIDEO = ""
 # Custom width for reading input video data.
