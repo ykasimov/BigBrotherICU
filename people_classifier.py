@@ -89,7 +89,7 @@ def train():
             outputs = net(images)
             _, predicted = torch.max(outputs, 1)
             c = (predicted == labels).squeeze()
-            if len(labels) == 1: continue
+            if len(labels) < BATCH_SIZE: continue
             for i in range(BATCH_SIZE):
                 label = labels[i]
                 class_correct[label] += c[i].item()
