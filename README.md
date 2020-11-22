@@ -21,6 +21,8 @@ In order to identify how nurses and doctors move from patient to patient and bet
 ## Forth step. Action detection. 
 We used action detection model, which could classify a person walking, siting, lying, sleeping, running, bending over and so on. This model could be used for detection uncommon behaviour of this patient.
 
+![Alt text](pictures/sleeping.jpg)
+
 ## Unsuccsesfull experements.
 
 1. Detect heart rate in some cases based on remote photoplethysmography. The model needs to be retrained, since it was trained on front face pictures, and in ICU, most of people lying so angle is not suitable.
